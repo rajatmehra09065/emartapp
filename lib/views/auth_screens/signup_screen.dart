@@ -1,5 +1,6 @@
 import 'package:emartapp/consts/consts.dart';
 import 'package:emartapp/consts/lists.dart';
+import 'package:emartapp/controllers/auth_controller.dart';
 import 'package:emartapp/widget_common/app_logo_widget.dart';
 import 'package:emartapp/widget_common/bg_widget.dart';
 import 'package:emartapp/widget_common/custom_textfield.dart';
@@ -16,6 +17,14 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
 
   bool? isCheck = false;
+  //firebase related
+  var controller = Get.put(AuthController());
+
+  //text controller
+  var nameController = TextEditingController();
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+  var passwordRetypeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +49,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 children: [
                   10.heightBox,
-                  customTextFiled(title: name , hint: nameHint),
-                  customTextFiled(title: email , hint: emailHint),
-                  customTextFiled(title: password ,hint: passwordHint),
-                  customTextFiled(title: retypePassword , hint: passwordHint),
+                  customTextFiled(title: name , hint: nameHint, controller: nameController),
+                  customTextFiled(title: email , hint: emailHint , controller: emailController) ,
+                  customTextFiled(title: password ,hint: passwordHint , controller: passwordController),
+                  customTextFiled(title: retypePassword , hint: passwordHint, controller: passwordRetypeController) ,
 
                   5.heightBox,
                   //checkbox
@@ -65,7 +74,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   5.heightBox,
                   //button
-                  ourButton(title: signup , color: isCheck==true ? redColor : lightGrey , textColor: whiteColor , onPressed: (){}).box.width(context.screenWidth - 50).make(),
+                  ourButton(title: signup , color: isCheck==true ? redColor : lightGrey , textColor: whiteColor , onPressed: () async {
+                    //onppressed button
+                    if (isCheck !=false )
+                      {
+                        try{
+                          await controller.signUpMethod();
+                        }
+                        catch (e)
+                    {
+
+                    }
+                      }
+                  }).box.width(context.screenWidth - 50).make(),
 
                   10.heightBox,
                   Row(
